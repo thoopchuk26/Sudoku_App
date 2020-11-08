@@ -2,6 +2,13 @@ import 'dart:math';
 import 'package:sudoku_app/difficulty.dart';
 import 'difficulty.dart';
 
+/*
+Disclaimer:
+90% of the logic in this class was taken from
+https://www.geeksforgeeks.org/program-sudoku-generator/
+I do not claim to have made this code from scratch
+ */
+
 class Sudoku{
   final difficulty;
   final board = List<List<int>>.generate(9, (i) => List<int>.generate(9, (j) => 0));
