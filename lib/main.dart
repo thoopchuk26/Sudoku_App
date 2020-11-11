@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Sudoku Home Page'),
     );
   }
 }
@@ -31,17 +31,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  Difficulty diff;
-  Sudoku sudoku = new Sudoku(Difficulty.HARD);
 
   _MyHomePageState();
-
-  void initState(){
-    sudoku.fillValues();
-    sudoku.printSudoku();
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -57,20 +48,106 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+            RaisedButton(
+              child: Text('Play Game'),
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => PlaySudokuPage()));
+              },
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            RaisedButton(
+              child: Text('Solve Board'),
+              onPressed: () {
+              },
+            )
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
+
+class PlaySudokuPage extends StatefulWidget {
+  @override
+  _PlaySudokuPageState createState() => _PlaySudokuPageState();
+}
+
+class _PlaySudokuPageState extends State<PlaySudokuPage> {
+
+  String boardDisplay = '';
+  Difficulty diff;
+  int choice = 0;
+  Sudoku sudoku = new Sudoku(Difficulty.HARD);
+
+  void initState(){
+    sudoku.fillValues();
+    // sudoku.printSudoku();
+  }
+
+  void difficultySelection(){
+    if(choice == 2){
+      diff = Difficulty.HARD;
+    } else if(choice == 1){
+      diff = Difficulty.MEDIUM;
+    } else{
+      diff = Difficulty.EASY;
+    }
+  }
+
+  void displayBoard(){
+    boardDisplay = sudoku.giveSudokuBoard();
+    difficultySelection();
+    sudoku = Sudoku(diff);
+    sudoku.fillValues();
+    print(boardDisplay);
+    print(diff);
+    for(int i = 0; i <= 3; i++){
+      print('');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Play Sudoku'),
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            DropdownButton(
+                value: choice,
+                //disabledHint: Text('Oi bruv, you done messed up'),
+                items: [DropdownMenuItem(
+                    child: Text('Easy'),
+                    value: 0
+                ),
+                  DropdownMenuItem(
+                      child: Text('Medium'),
+                      value: 1
+                  ),
+                  DropdownMenuItem(
+                      child: Text('Hard'),
+                      value: 2
+                  )],
+                onChanged: (value) {
+                  setState(() {
+                    choice = value;
+                  });}
+            ),
+            RaisedButton(
+              child: Text('Generate Sudoku Grid'),
+              onPressed: () {
+                displayBoard();
+                setState(() {
+                });
+              },
+              ),
+            Text('$boardDisplay'),
+          ],
+        )
+      ),
+    );
+  }
+}
+

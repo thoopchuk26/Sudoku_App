@@ -10,11 +10,16 @@ I do not claim to have made this code from scratch
  */
 
 class Sudoku{
-  final difficulty;
+  //final difficulty;
+  Difficulty difficulty;
   final board = List<List<int>>.generate(9, (i) => List<int>.generate(9, (j) => 0));
   Random random = new Random();
 
   Sudoku(this.difficulty);
+
+  void setDiff (Difficulty diff){
+    this.difficulty = diff;
+  }
 
   void fillValues() {
     fillDiagonal();
@@ -131,6 +136,20 @@ class Sudoku{
         board[i][j] = 0;
       }
     }
+  }
+
+  String giveSudokuBoard(){
+    String sboard =
+    board[0].toString() + '\n' +
+    board[1].toString() + '\n' +
+    board[2].toString() + '\n' +
+    board[3].toString() + '\n' +
+    board[4].toString() + '\n' +
+    board[5].toString() + '\n' +
+    board[6].toString() + '\n' +
+    board[7].toString() + '\n' +
+    board[8].toString();
+    return sboard;
   }
 
   void printSudoku() {
