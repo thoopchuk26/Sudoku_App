@@ -151,16 +151,4 @@ class Sudoku{
     board[8].toString();
     return sboard;
   }
-
-  void printSudoku() {
-    print(board[0]);
-    print(board[1]);
-    print(board[2]);
-    print(board[3]);
-    print(board[4]);
-    print(board[5]);
-    print(board[6]);
-    print(board[7]);
-    print(board[8]);
-  }
 }

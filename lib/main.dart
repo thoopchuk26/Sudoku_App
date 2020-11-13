@@ -77,12 +77,7 @@ class _PlaySudokuPageState extends State<PlaySudokuPage> {
   String boardDisplay = '';
   Difficulty diff;
   int choice = 0;
-  Sudoku sudoku = new Sudoku(Difficulty.HARD);
-
-  void initState(){
-    sudoku.fillValues();
-    // sudoku.printSudoku();
-  }
+  Sudoku sudoku = new Sudoku(Difficulty.EASY);
 
   void difficultySelection(){
     if(choice == 2){
@@ -95,10 +90,10 @@ class _PlaySudokuPageState extends State<PlaySudokuPage> {
   }
 
   void displayBoard(){
-    boardDisplay = sudoku.giveSudokuBoard();
     difficultySelection();
     sudoku = Sudoku(diff);
     sudoku.fillValues();
+    boardDisplay = sudoku.giveSudokuBoard();
     print(boardDisplay);
     print(diff);
     for(int i = 0; i <= 3; i++){
