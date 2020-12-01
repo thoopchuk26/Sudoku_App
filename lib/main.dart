@@ -41,10 +41,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey[800],
+        backgroundColor: Colors.blueGrey[800],
         title: Text(widget.title),
       ),
-      backgroundColor: Colors.grey[900],
+      backgroundColor: Colors.blueGrey[900],
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -100,10 +100,10 @@ class _PlaySudokuPageState extends State<PlaySudokuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey[800],
+        backgroundColor: Colors.blueGrey[800],
         title: Text('Select Difficulty'),
       ),
-      backgroundColor: Colors.grey[900],
+      backgroundColor: Colors.blueGrey[900],
       body: Center(
         child: Column(
           children: [
@@ -195,7 +195,6 @@ class _SudokuGridPageState extends State<SudokuGridPage> {
         body.add(Row(mainAxisAlignment: MainAxisAlignment.center, children: rows[i],));
       }
     }
-
     body.add(RaisedButton(
       child: Text('Update'),
       onPressed: () {
@@ -220,13 +219,12 @@ class _SudokuGridPageState extends State<SudokuGridPage> {
           number = value;
         });}
     ));
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Play Sudoku', style: TextStyle(color: Colors.white),),
-        backgroundColor: Colors.grey[800],
+        backgroundColor: Colors.blueGrey[800],
       ),
-      backgroundColor: Colors.grey[900],
+      backgroundColor: Colors.blueGrey[900],
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
