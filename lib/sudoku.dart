@@ -10,7 +10,6 @@ I do not claim to have made this code from scratch
  */
 
 class Sudoku{
-  //final difficulty;
   Difficulty difficulty;
   final board = List<List<int>>.generate(9, (i) => List<int>.generate(9, (j) => 0));
   Random random = new Random();
