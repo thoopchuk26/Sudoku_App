@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sudoku_app/Square.dart';
 import 'difficulty.dart';
 import 'sudoku.dart';
+import 'dart:async';
 
 void main() {
   runApp(MyApp());
@@ -77,7 +79,12 @@ class _PlaySudokuPageState extends State<PlaySudokuPage> {
   String boardDisplay = '';
   Difficulty diff;
   int choice = 0;
-  Sudoku sudoku = new Sudoku(Difficulty.EASY);
+  Sudoku sudoku = new Sudoku(Difficulty.HARD);
+
+  void initState(){
+    sudoku.fillValues();
+    // sudoku.printSudoku();
+  }
 
   void difficultySelection(){
     if(choice == 2){
@@ -94,6 +101,7 @@ class _PlaySudokuPageState extends State<PlaySudokuPage> {
     sudoku = Sudoku(diff);
     sudoku.fillValues();
     boardDisplay = sudoku.giveSudokuBoard();
+    //print(sudoku.board[8][0]);
     print(boardDisplay);
     print(diff);
     for(int i = 0; i <= 3; i++){
@@ -112,7 +120,6 @@ class _PlaySudokuPageState extends State<PlaySudokuPage> {
           children: [
             DropdownButton(
                 value: choice,
-                //disabledHint: Text('Oi bruv, you done messed up'),
                 items: [DropdownMenuItem(
                     child: Text('Easy'),
                     value: 0
@@ -138,6 +145,13 @@ class _PlaySudokuPageState extends State<PlaySudokuPage> {
                 });
               },
               ),
+            RaisedButton(
+              child: Text('Go to Sudoku'),
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => SudokuGridPage(sudoku: sudoku,)));
+              },
+            ),
             Text('$boardDisplay'),
           ],
         )
@@ -146,3 +160,95 @@ class _PlaySudokuPageState extends State<PlaySudokuPage> {
   }
 }
 
+class SudokuGridPage extends StatefulWidget {
+  SudokuGridPage({Key key, this.sudoku}) : super(key: key);
+
+  final Sudoku sudoku;
+  // Either use this or do "final int size like in boggle"
+
+
+  @override
+  _SudokuGridPageState createState() => _SudokuGridPageState();
+}
+
+class _SudokuGridPageState extends State<SudokuGridPage> {
+
+  List<List<Square>> squares = new List<List<Square>>();
+  int number = 0;
+
+  void squareSelect(Square square){
+      square.changeNumber(number + 1);
+  }
+  List<DropdownMenuItem> itemMaker(){
+    List<DropdownMenuItem> numbers = new List<DropdownMenuItem>();
+    for(int i = 0; i < 9; i++){
+      numbers.add(DropdownMenuItem(
+          child: Text((i+1).toString()),
+          value: i
+      ),);
+    }
+    return numbers;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> body = new List<Widget>();
+    List<List<Widget>> rows = getRows();
+    for(int i = 0; i < 9; i ++){
+      body.add(Row(mainAxisAlignment: MainAxisAlignment.center, children: rows[i],));
+    }
+    body.add(RaisedButton(
+      child: Text('Update'),
+      onPressed: () {
+        setState(() {
+        });
+      },
+    ));
+    body.add(DropdownButton(
+      items: itemMaker(),
+      value: number,
+      onChanged: (value) {
+        setState(() {
+          number = value;
+        });}
+    ));
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Sudoku Visualization'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: body,
+        ),
+      ),
+    );
+  }
+
+  List<List<Widget>> getRows() {
+    List<List<Widget>> rows = new List<List<Widget>>();
+    for (int i=0; i < 9; i++) {
+      squares.add(new List<Square>());
+      rows.add(new List<Widget>());
+      for (int j=0; j < 9; j++) {
+        squares[i].add(new  Square(widget.sudoku.board[i][j]));
+        rows[i].add(
+            GestureDetector( // figured this out at https://stackoverflow.com/questions/57100266/how-do-i-get-to-tap-on-a-custompaint-path-in-flutter-using-gesturedetect
+              child: Container(
+                  width: (MediaQuery.of(context).size.width - 20) / 9, // figured out how to get screen size at https://flutter.dev/docs/development/ui/layout/responsive
+                  height: (MediaQuery.of(context).size.width - 20) / 9,
+                  child: CustomPaint(painter: squares[i][j])
+              ),
+              onTap: () {
+                squareSelect(squares[i][j]);
+              },
+            )
+        );
+
+
+      }
+    }
+    return rows;
+  }
+}
