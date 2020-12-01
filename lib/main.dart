@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:sudoku_app/Square.dart';
 import 'difficulty.dart';
 import 'sudoku.dart';
-import 'dart:async';
+
+// https://stackoverflow.com/questions/53767950/how-to-periodically-set-state
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -40,13 +40,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
+        backgroundColor: Colors.grey[800],
         title: Text(widget.title),
       ),
+      backgroundColor: Colors.grey[900],
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -83,7 +81,6 @@ class _PlaySudokuPageState extends State<PlaySudokuPage> {
 
   void initState(){
     sudoku.fillValues();
-    // sudoku.printSudoku();
   }
 
   void difficultySelection(){
@@ -101,20 +98,16 @@ class _PlaySudokuPageState extends State<PlaySudokuPage> {
     sudoku = Sudoku(diff);
     sudoku.fillValues();
     boardDisplay = sudoku.giveSudokuBoard();
-    //print(sudoku.board[8][0]);
-    print(boardDisplay);
-    print(diff);
-    for(int i = 0; i <= 3; i++){
-      print('');
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Play Sudoku'),
+        backgroundColor: Colors.grey[800],
+        title: Text('Select Difficulty'),
       ),
+      backgroundColor: Colors.grey[900],
       body: Center(
         child: Column(
           children: [
@@ -138,7 +131,7 @@ class _PlaySudokuPageState extends State<PlaySudokuPage> {
                   });}
             ),
             RaisedButton(
-              child: Text('Generate Sudoku Grid'),
+              child: Text('Generate New Sudoku Grid'),
               onPressed: () {
                 displayBoard();
                 setState(() {
@@ -146,7 +139,7 @@ class _PlaySudokuPageState extends State<PlaySudokuPage> {
               },
               ),
             RaisedButton(
-              child: Text('Go to Sudoku'),
+              child: Text('Solve Sudoku Board'),
               onPressed: () {
                 Navigator.push(
                     context, MaterialPageRoute(builder: (context) => SudokuGridPage(sudoku: sudoku,)));
@@ -164,8 +157,6 @@ class SudokuGridPage extends StatefulWidget {
   SudokuGridPage({Key key, this.sudoku}) : super(key: key);
 
   final Sudoku sudoku;
-  // Either use this or do "final int size like in boggle"
-
 
   @override
   _SudokuGridPageState createState() => _SudokuGridPageState();
@@ -179,6 +170,7 @@ class _SudokuGridPageState extends State<SudokuGridPage> {
   void squareSelect(Square square){
       square.changeNumber(number + 1);
   }
+
   List<DropdownMenuItem> itemMaker(){
     List<DropdownMenuItem> numbers = new List<DropdownMenuItem>();
     for(int i = 0; i < 9; i++){
@@ -215,8 +207,10 @@ class _SudokuGridPageState extends State<SudokuGridPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sudoku Visualization'),
+        title: Text('Play Sudoku', style: TextStyle(color: Colors.white),),
+        backgroundColor: Colors.grey[800],
       ),
+      backgroundColor: Colors.grey[900],
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -226,6 +220,8 @@ class _SudokuGridPageState extends State<SudokuGridPage> {
     );
   }
 
+  // The implementation of GestureDetector for grid visualization is drawn, in
+  // large part, from the Boggle game from Project 2.
   List<List<Widget>> getRows() {
     List<List<Widget>> rows = new List<List<Widget>>();
     for (int i=0; i < 9; i++) {
@@ -234,9 +230,9 @@ class _SudokuGridPageState extends State<SudokuGridPage> {
       for (int j=0; j < 9; j++) {
         squares[i].add(new  Square(widget.sudoku.board[i][j]));
         rows[i].add(
-            GestureDetector( // figured this out at https://stackoverflow.com/questions/57100266/how-do-i-get-to-tap-on-a-custompaint-path-in-flutter-using-gesturedetect
+            GestureDetector(
               child: Container(
-                  width: (MediaQuery.of(context).size.width - 20) / 9, // figured out how to get screen size at https://flutter.dev/docs/development/ui/layout/responsive
+                  width: (MediaQuery.of(context).size.width - 20) / 9,
                   height: (MediaQuery.of(context).size.width - 20) / 9,
                   child: CustomPaint(painter: squares[i][j])
               ),
@@ -245,8 +241,6 @@ class _SudokuGridPageState extends State<SudokuGridPage> {
               },
             )
         );
-
-
       }
     }
     return rows;

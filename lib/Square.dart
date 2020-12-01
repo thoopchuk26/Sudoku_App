@@ -1,7 +1,8 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
-
+// Since it is tied so heavily with visualization, this class is heavily based
+// on a similar class from the Boggle project from Project 2
 class Square extends CustomPainter{
 
   String number;
@@ -40,6 +41,8 @@ class Square extends CustomPainter{
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) =>  true;
+  bool shouldRepaint(CustomPainter oldDelegate){
+    return true;
+  }
 
 }
