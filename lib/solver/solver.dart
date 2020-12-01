@@ -47,35 +47,41 @@ class Solver {
   }
 
   List<List<int>> solveSudoku(List<List<int>> board) {
-    Queue<SudokuCell> cellStack = Queue<SudokuCell>();
-    Map<String, int> nextEmptyCell = this.getNextEmptyCell(board);
-    SudokuCell current = SudokuCell(row: nextEmptyCell['row'], col: nextEmptyCell['col'], board: board,);
-    while (true) {
-      this.findPossibilities(current, board);
-      if (current.getNumberOfChoices() == 0) {
-        current = cellStack.removeLast();
-        current.setPossibility(
-          false,
-          current.getBoardNumber(current.row, current.col),
-        );
-        current.setBoardCell(
-          current.row,
-          current.col,
-          0,
-        );
-        board = current.getBoard();
-      } else {
-        current.setBoardCell(
-          current.row,
-          current.col,
-          current.getPossible()[0],
-        );
-        cellStack.addLast(current);
-        board = current.getBoard();
-        nextEmptyCell = this.getNextEmptyCell(board);
-        if (nextEmptyCell == null) break;
-        current = new SudokuCell(row: nextEmptyCell['row'], col: nextEmptyCell['col'], board: board,);
+    if (getNextEmptyCell(board) != null) {
+      Queue<SudokuCell> cellStack = Queue<SudokuCell>();
+      Map<String, int> nextEmptyCell = this.getNextEmptyCell(board);
+      SudokuCell current = SudokuCell(
+        row: nextEmptyCell['row'], col: nextEmptyCell['col'], board: board,);
+      while (true) {
+        this.findPossibilities(current, board);
+        if (current.getNumberOfChoices() == 0) {
+          current = cellStack.removeLast();
+          current.setPossibility(
+            false,
+            current.getBoardNumber(current.row, current.col),
+          );
+          current.setBoardCell(
+            current.row,
+            current.col,
+            0,
+          );
+          board = current.getBoard();
+        } else {
+          current.setBoardCell(
+            current.row,
+            current.col,
+            current.getPossible()[0],
+          );
+          cellStack.addLast(current);
+          board = current.getBoard();
+          nextEmptyCell = this.getNextEmptyCell(board);
+          if (nextEmptyCell == null) break;
+          current = new SudokuCell(row: nextEmptyCell['row'],
+            col: nextEmptyCell['col'],
+            board: board,);
+        }
       }
+      return board;
     }
     return board;
   }
