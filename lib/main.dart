@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sudoku_app/Square.dart';
+import 'package:sudoku_app/solver/solver.dart';
 import 'difficulty.dart';
 import 'sudoku.dart';
 
@@ -55,11 +56,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     context, MaterialPageRoute(builder: (context) => PlaySudokuPage()));
               },
             ),
-            RaisedButton(
-              child: Text('Solve Board'),
-              onPressed: () {
-              },
-            )
           ],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
@@ -165,7 +161,10 @@ class SudokuGridPage extends StatefulWidget {
 class _SudokuGridPageState extends State<SudokuGridPage> {
 
   List<List<Square>> squares = new List<List<Square>>();
+  Solver solver;
   int number = 0;
+  bool solved = false;
+  bool done = false;
 
   void squareSelect(Square square){
       square.changeNumber(number + 1);
@@ -185,15 +184,32 @@ class _SudokuGridPageState extends State<SudokuGridPage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> body = new List<Widget>();
-    List<List<Widget>> rows = getRows();
-    for(int i = 0; i < 9; i ++){
-      body.add(Row(mainAxisAlignment: MainAxisAlignment.center, children: rows[i],));
+    if(!done){
+      List<List<Widget>> rows = getRows(widget.sudoku.board);
+      for(int i = 0; i < 9; i ++){
+        body.add(Row(mainAxisAlignment: MainAxisAlignment.center, children: rows[i],));
+      }
+    } else{
+      List<List<Widget>> rows = getRows(Solver().solveSudoku(widget.sudoku.board));
+      for(int i = 0; i < 9; i ++){
+        body.add(Row(mainAxisAlignment: MainAxisAlignment.center, children: rows[i],));
+      }
     }
+
     body.add(RaisedButton(
       child: Text('Update'),
       onPressed: () {
-        setState(() {
-        });
+        setState((){});
+      },
+    ));
+    body.add(RaisedButton(
+      child: Text('Print Solution'),
+      onPressed: (){
+        print('v Solution v');
+        for(int i = 0; i < 9; i++) {
+          print(Solver().solveSudoku(widget.sudoku.board)[i]);
+        }
+        print('^ Solution ^');
       },
     ));
     body.add(DropdownButton(
@@ -222,13 +238,13 @@ class _SudokuGridPageState extends State<SudokuGridPage> {
 
   // The implementation of GestureDetector for grid visualization is drawn, in
   // large part, from the Boggle game from Project 2.
-  List<List<Widget>> getRows() {
+  List<List<Widget>> getRows(List<List<int>> boards) {
     List<List<Widget>> rows = new List<List<Widget>>();
     for (int i=0; i < 9; i++) {
       squares.add(new List<Square>());
       rows.add(new List<Widget>());
       for (int j=0; j < 9; j++) {
-        squares[i].add(new  Square(widget.sudoku.board[i][j]));
+        squares[i].add(new  Square(boards[i][j]));
         rows[i].add(
             GestureDetector(
               child: Container(
@@ -246,3 +262,4 @@ class _SudokuGridPageState extends State<SudokuGridPage> {
     return rows;
   }
 }
+

@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:sudoku_app/difficulty.dart';
+import 'package:sudoku_app/solver/solver.dart';
 import 'difficulty.dart';
 
 /*
@@ -11,13 +12,17 @@ I do not claim to have made this code from scratch
 
 class Sudoku{
   Difficulty difficulty;
-  final board = List<List<int>>.generate(9, (i) => List<int>.generate(9, (j) => 0));
+  List<List<int>> board = List<List<int>>.generate(9, (i) => List<int>.generate(9, (j) => 0));
   Random random = new Random();
 
   Sudoku(this.difficulty);
 
   void setDiff (Difficulty diff){
     this.difficulty = diff;
+  }
+
+  void solveBoard(){
+    board = Solver().solveSudoku(board);
   }
 
   void fillValues() {
