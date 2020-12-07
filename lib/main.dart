@@ -73,7 +73,7 @@ class _PlaySudokuPageState extends State<PlaySudokuPage> {
   String boardDisplay = '';
   Difficulty diff;
   int choice = 0;
-  Sudoku sudoku = new Sudoku(Difficulty.HARD);
+  Sudoku sudoku = new Sudoku(Difficulty.EASY);
 
   void initState(){
     sudoku.fillValues();
@@ -204,11 +204,12 @@ class _SudokuGridPageState extends State<SudokuGridPage> {
     body.add(RaisedButton(
       child: Text('Print Solution'),
       onPressed: (){
-        print('v Solution v');
+        widget.sudoku.board = Solver().solveSudoku(widget.sudoku.board);
         for(int i = 0; i < 9; i++) {
-          print(Solver().solveSudoku(widget.sudoku.board)[i]);
+          for(int j = 0; j < 9; j++) {
+            squares[i][j].number = widget.sudoku.board[i][j].toString();
+          }
         }
-        print('^ Solution ^');
       },
     ));
     body.add(DropdownButton(
