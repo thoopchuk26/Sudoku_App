@@ -27,7 +27,7 @@ void main() {
           numZeroes++;
       }
     }
-    expect(numZeroes, 41);//check for correct number of empty spaces in board
+    expect(numZeroes, 40);//check for correct number of empty spaces in board
   });
   test("test medium board generation",(){
     Sudoku sudoku = new Sudoku(Difficulty.MEDIUM);
@@ -39,7 +39,7 @@ void main() {
           numZeroes++;
       }
     }
-    expect(numZeroes, 51);//check for correct number of empty spaces in board
+    expect(numZeroes, 50);//check for correct number of empty spaces in board
   });
   test("test hard board generation",(){
     Sudoku sudoku = new Sudoku(Difficulty.HARD);
@@ -51,6 +51,6 @@ void main() {
           numZeroes++;
       }
     }
-    expect(numZeroes, 61);//check for correct number of empty spaces in board
+    expect(numZeroes, 60);//check for correct number of empty spaces in board
   });
 }
